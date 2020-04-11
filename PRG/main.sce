@@ -15,8 +15,8 @@
 //
 // Versions
 //  Version 1.0.0 -- D. Mottet -- Oct 10, 2019
-
-
+//  Version 1.0.1 -- D. Mottet -- Apr 11, 2020
+//      with input (from DAT) and ouptut (to RES)
 
 // The main script always contains two parts : 
 //  1°) set up of working environement 
@@ -37,31 +37,47 @@ exec(FullFileInitTRT);
 ////////////////////////////////////////////////////////////////////////////////
 // BEG : code example : plot a signal + noise 
 // 
+// PART 0 : read an input file
+fnameIn = fullfile(DAT_PATH, "Frequencies.csv"); 
+separator = " "; 
+decimal   = "."; 
+Txt = csvRead(fnameIn, separator, decimal, "string" );
+Val = csvRead(fnameIn, separator, decimal, "double" );
+
+SampFreq   = Val(2, 1);                // Sampling frequency (Hz)
+SignalFreq = Val(2, 2);                // Signal frequency (Hz)
+NoiseFreq  = Val(2, 3);                // Noise frequency (Hz)
+CutFreq    = Val(2, 4);                // cutoff frequency (Hz)
+
 // PART 1 : computations 
 
 // Generate a signal (low frequency) + noise (high frequency)
-
-SampFreq = 200;                     // Sampling frequency (Hz)
 Duration = 5;                       // Duration of signal (s)
 T = 0 : 1./SampFreq : Duration;     // Time (over Duration sec)
 T = T';                             // Time as a column vector 
 
-S01 = 1.0 .* cos(2 .* %pi .* 01 .* T);     //  1 Hz cosine 
-S50 = 0.1 .* cos(2 .* %pi .* 50 .* T);     // 50 Hz cosine 
-S = S01 + S50;                             // S contains two signals  
+Ss =   1 .* cos(2 .* %pi .* SignalFreq .* T);     // Amplitude 1
+Sn = 0.1 .* cos(2 .* %pi .* NoiseFreq  .* T);     // Amplitude 0.1 
+S = Ss + Sn;                        // S contains two signals  
 
 // lowpass the signal 
-CutFreq = 3;                                    // cutoff frequency (Hz)
+
 Sf = LowPassButtDouble (S, SampFreq, CutFreq);  // filter
 
 // PART 2 : illustrations  
-figure(1);clf; 
+fig = 1;    
+figure(fig);clf; 
 plot(T, S,  '-k')
 plot(T, Sf, '-b')
 xlabel("Time (s)")
 ylabel("Amplitude (unit?)")
 xtitle("Signal as a function of time")
 legend("S", "Sf")
+
+
+// PART 3 : save figure 1 as a result 
+fnamePDF = fullfile(RES_PATH, "Signals.pdf"); 
+xs2pdf(fig, fnamePDF)
 
 // END : code example : plot a signal + noise 
 ////////////////////////////////////////////////////////////////////////////////

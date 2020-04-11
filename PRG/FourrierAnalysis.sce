@@ -28,7 +28,8 @@
 [Sf_f, Sf_m] = AmplitudeSpectrum(Sf); 
 
 // PART 2 : illustrations  
-figure(2); clf; 
+figFrequencies = 2; 
+figure(figFrequencies); clf; 
 plot(S_f,  S_m,  "-k")
 plot(Sf_f, Sf_m, "-b")
 
@@ -36,6 +37,12 @@ xlabel("Frequency (Hz)")
 ylabel("Module (same unit as orginal signal)")
 xtitle("Amplitude spectrum from fft")
 legend("S", "Sf")
+
+// PART 3 : save figure as a result 
+fnamePDF = fullfile(RES_PATH, "Frequencies.pdf"); 
+xs2pdf(figFrequencies, fnamePDF)
+
+
 
 // END : get and display amplitude spectrum 
 ////////////////////////////////////////////////////////////////////////////////
