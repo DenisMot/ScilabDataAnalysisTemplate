@@ -18,7 +18,9 @@ function [Sf] = LowPassButtDouble (S, SampFreq, CutFreq)
     //
     // Examples
     //  To get a signal filtered at 8Hz
-    //      T = linspace(0,10,1001);
+    //      SampFreq = 100; 
+    //      tEnd = 10; 
+    //      T = linspace(0, tEnd, SampFreq * tEnd + 1);
     //      S = sin(2*%pi*T)+sin(20*%pi*T);
     //      Sf = LowPassButtDouble (S, SampFreq, 8);
     //      plot(T, S, '-k', T, Sf, '-b')
@@ -37,6 +39,8 @@ function [Sf] = LowPassButtDouble (S, SampFreq, CutFreq)
     //      self contained example (cut-paste is ok)
     //  Version 1.1.0 -- D. Mottet -- 2020-04-11
     //      correct cutoff for dual pass second order butterworth 
+    //  Version 1.1.1 -- D. Mottet -- 2020-10-06
+    //      added SampFreq in exemple
 
 
 
