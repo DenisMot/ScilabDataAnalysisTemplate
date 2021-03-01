@@ -15,12 +15,13 @@
 //  Version 2.0.0 -- D. Mottet -- Jun 17, 2011
 //  Version 2.1.0 -- D. Mottet -- Oct 10, 2019
 //      recursive getd on directories within PRG_PATH 
-
+//  Version 2.1.1 -- D. Mottet -- Mar 01, 2021
+//      update to scilab 6 
 
 ////////////////////////////////////////////////////////////////////////////////
 // -- Clear workspace
 clear ;             // clear all variables
-xdel(winsid());     // delete all graphic windows
+close(winsid());     // delete all graphic windows
 mode(0);            // to get what is written when you DO NOT add an endding ;
 
 
