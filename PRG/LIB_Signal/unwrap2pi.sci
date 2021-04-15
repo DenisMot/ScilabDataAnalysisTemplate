@@ -1,16 +1,16 @@
-function ph=unwrap(phase, step)
+function ph=unwrap2pi(phase, step)
     // Unwraps the phase to get rid of jumps larger than step 
     //
     // Calling Sequence
-    //   ph=unwrap(phase, step)
+    //   ph=unwrap2pi(phase, step)
     //
     // Parameters
     //  phase: vector, the input phase
     //  step : real, the maximal allowed value in diff(phase) 
     //
     // Description
-    // unwrap(phase, step) unwraps the phase by changing jumps grater than step 
-    // to their 2*step complement (e.g;, unwrap phase angle in rotating waves).
+    // unwrap2pi(phase, step) unwraps the phase by changing jumps grater than pi
+    // to their 2*pi complement (e.g;, unwrap phase angle in rotating waves).
     // Nan are neglected. 
     //
     // Examples
@@ -19,7 +19,7 @@ function ph=unwrap(phase, step)
     //    X = cos(omega*T);
     //    Y = sin(omega*T);
     //    p = atan(Y,X); 
-    //    P = unwrap(p, %pi); 
+    //    P = unwrap2pi(p, %pi); 
     //
     //    subplot(2,1,1)
     //    plot(p, '-k')
@@ -37,10 +37,13 @@ function ph=unwrap(phase, step)
     //
     // Versions
     //  Version 1.0.0 -- D. Mottet -- Jul 19, 2009
-    //      
+    //      works exactly as matlab unwrap
     //  Version 2.0.0 -- D. Mottet -- Apr 14, 2020
     //      argument check and nan management 
     //      header comments following scilab guidelines 
+    //  Version 2.0.1 -- D. Mottet -- Apr 10, 2021
+    //      renamed as unwrap2pi to allow use of scilab unwrap()
+    //      scilab:unwrap(theta, 0) works closest to matlab unwrap
 
     if min(size(phase)) > 1 then
         error("Unwraps expects vectors...")
@@ -66,10 +69,17 @@ endfunction
 function ph=local_unwrap(phase, step)
     // Unwraps column vector phase
     dp = diff(phase);                    // change in phase/angle
+    
     Pjump = find(dp > step);             // positive phase jump
-    dp(Pjump) =  dp(Pjump) - 2 * step;   // correction
-    Njump = find(dp <= -step);
-    dp(Njump) = 2 * step + dp(Njump);
+    if ~isempty(Pjump) then
+        dp(Pjump) =  dp(Pjump) - 2 * step;   // correction
+    end
+   
+    Njump = find(dp <= -step);           // negative phase jump
+    if ~isempty(Njump) then
+        dp(Njump) = 2 * step + dp(Njump);    // correction
+    end
+    
     dp = [phase(1); dp];                 // column concatenation
     ph = cumsum(dp);                     // integration
 endfunction
@@ -80,7 +90,7 @@ function example()
     X = cos(omega*T);
     Y = sin(omega*T);
     p = atan(Y,X); 
-    P = unwrap(p, %pi); 
+    P = unwrap2pi(p, %pi); 
 
     subplot(2,1,1)
     plot(p, '-k')

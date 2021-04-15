@@ -74,7 +74,6 @@ ylabel("Amplitude (unit?)")
 xtitle("Signal as a function of time")
 legend("S", "Sf")
 
-
 // PART 3 : save figure 1 as a result 
 fnamePDF = fullfile(RES_PATH, "Signals.pdf"); 
 xs2pdf(fig, fnamePDF)
