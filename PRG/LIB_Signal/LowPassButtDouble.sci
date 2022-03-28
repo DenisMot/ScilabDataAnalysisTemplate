@@ -12,8 +12,8 @@ function [Sf] = LowPassButtDouble (S, SampFreq, CutFreq)
     //
     // Description
     //  LowPassButtDouble : low pass filter of a signal with dual pass Butterworh
-    //  to cancel phase shift. The resulting filter has an order of 4 and an
-    //  effective cut frequency of about CutFreq * 83%.
+    //  to cancel phase shift. Care is take to consume the starting effects by padding, 
+    //  and to adjust the cutoff to the dual pass. 
     //  Sf is a vector (same size as S)
     //
     // Examples
