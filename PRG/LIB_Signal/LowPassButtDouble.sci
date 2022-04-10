@@ -41,6 +41,8 @@ function [Sf] = LowPassButtDouble (S, SampFreq, CutFreq)
     //      correct cutoff for dual pass second order butterworth 
     //  Version 1.1.1 -- D. Mottet -- 2020-10-06
     //      added SampFreq in exemple
+   //  Version 1.1.2 -- D. Mottet -- 2022-04-10
+    //      padding is now 1 s
 
 
 
@@ -53,7 +55,7 @@ function [Sf] = LowPassButtDouble (S, SampFreq, CutFreq)
     // Computation of the Butterworth filter equation
     hz = iir(2, 'lp', 'butt', [Cutoff/SampFreq, 0], [0,0]);
     // Dual-pass filtering in the time domain
-    ReflexionSize = 60;     // to consume starting effects of iir filter
+    ReflexionSize = floor(SampFreq);     // to consume starting effects of iir filter (1 sec)
     Sf = fltsflts(S, hz, ReflexionSize);
 
 endfunction
